@@ -4,6 +4,8 @@ using UnityEngine;
 
 public interface IInteractable
 {
+    PlayerController InteractingPlayer { get; set; }
+
     void Interact();
     void Highlight(bool isSelected);
 }

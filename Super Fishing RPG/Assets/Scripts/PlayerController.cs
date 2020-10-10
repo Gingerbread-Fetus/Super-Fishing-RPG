@@ -28,6 +28,12 @@ public class PlayerController : MonoBehaviour
         controls.Player.Interact.performed += Interact_performed;
     }
 
+    private void OnDisable()
+    {
+        controls.Player.Disable();
+        controls.Player.Interact.performed -= Interact_performed;
+    }
+
     private void Awake()
     {
         myAnimator = GetComponent<Animator>();
@@ -47,17 +53,21 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        var moveVector = controls.Player.Move.ReadValue<Vector2>() * (moveSpeed * Time.deltaTime);
-        myRigidBody.velocity = moveVector;
+        if (isActiveAndEnabled)
+        {
+            var moveVector = controls.Player.Move.ReadValue<Vector2>() * (moveSpeed * Time.deltaTime);
+            myRigidBody.velocity = moveVector;
 
-        myAnimator.SetFloat("XDir", moveVector.x);
-        myAnimator.SetFloat("YDir", moveVector.y);
+            myAnimator.SetFloat("XDir", moveVector.x);
+            myAnimator.SetFloat("YDir", moveVector.y); 
+        }
     }
 
     private void Interact_performed(InputAction.CallbackContext ctx)
     {
         if (nearbyInteractable != null)
         {
+            nearbyInteractable.InteractingPlayer = this;
             nearbyInteractable.Interact();
         }
     }
