@@ -9,34 +9,24 @@ public class PlayerObjectDetector : MonoBehaviour
 
     public IInteractable NearbyInteractable { get => nearbyInteractable; set => nearbyInteractable = value; }
 
-    public void Disable()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        GetComponent<CircleCollider2D>().enabled = false;
-    }
-
-    public void Enable()
-    {
-        GetComponent<CircleCollider2D>().enabled = true;
-    }
-
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Interactable"))
+        nearbyInteractable = collision.GetComponent<IInteractable>();
+        Debug.Log("Object detector hit: " + collision);
+        if (nearbyInteractable != null)
         {
-            if (nearbyInteractable == null)
-            {
-                nearbyInteractable = collision.GetComponent<IInteractable>();
-                nearbyInteractable.Highlight(true);
-            }
+            //Debug.Log("nearbyInteractable is: " + nearbyInteractable);
+            nearbyInteractable.IsHighlighted = true;
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Interactable"))
+        if (nearbyInteractable != null)
         {
-            nearbyInteractable.Highlight(false);
-            nearbyInteractable = null;
+            //Debug.Log("nearbyInteractable is no longer: " + nearbyInteractable);
+            nearbyInteractable.IsHighlighted = false;
+            nearbyInteractable = null; 
         }
     }
 }

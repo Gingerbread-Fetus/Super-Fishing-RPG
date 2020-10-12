@@ -18,7 +18,10 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] float moveSpeed = 20.0f;
 
-    public IInteractable NearbyInteractable { get => objectDetector.NearbyInteractable;}
+    public IInteractable NearbyInteractable
+    {
+        get => objectDetector.NearbyInteractable;
+    }
 
     private void OnEnable()
     {
@@ -60,6 +63,7 @@ public class PlayerController : MonoBehaviour
 
     private void Interact_performed(InputAction.CallbackContext ctx)
     {
+        Debug.Log("Nearby interactable: " + NearbyInteractable);
         if (NearbyInteractable != null)
         {
             NearbyInteractable.InteractingPlayer = this;
@@ -67,18 +71,13 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
     public void DisableControl()
     {
         GetComponent<CapsuleCollider2D>().enabled = false;
-        enabled = false;
-        objectDetector.Disable();
     }
 
     public void EnableControl()
     {
         GetComponent<CapsuleCollider2D>().enabled = true;
-        enabled = true;
-        objectDetector.Enable();
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 public interface IInteractable
 {
     PlayerController InteractingPlayer { get; set; }
+    bool IsHighlighted { get; set; }
 
     void Interact();
-    void Highlight(bool isSelected);
 }
