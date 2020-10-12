@@ -14,13 +14,18 @@ public class PlayerBoat : MonoBehaviour, IInteractable
     Material defaultMaterial;
     SpriteRenderer spriteRenderer;
     Rigidbody2D myRigidBody;
-    bool isDocked = true;
+    private Vector3 landPosition;
+    private bool isValidDisembark;
 
     public PlayerController InteractingPlayer { get => interactingPlayer; set => interactingPlayer = value; }
 
     // Start is called before the first frame update
     void Start()
     {
+        if (controls == null)
+        {
+            controls = new PlayerControls(); 
+        }
         spriteRenderer = GetComponent<SpriteRenderer>();
         defaultMaterial = spriteRenderer.material;
     }
@@ -28,10 +33,10 @@ public class PlayerBoat : MonoBehaviour, IInteractable
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (!isDocked)
+        if (controls.Boat.enabled)
         {
             var moveVector = controls.Boat.Move.ReadValue<Vector2>() * (boatSpeed * Time.deltaTime);
-            myRigidBody.velocity = moveVector;
+            myRigidBody.velocity = moveVector; 
         }
     }
     
@@ -42,37 +47,11 @@ public class PlayerBoat : MonoBehaviour, IInteractable
         ActivateBoat();
     }
 
-    private void ActivateBoat()
-    {
-        MoveToBoat();
-
-        SetupBoatControls();
-    }
-    
-    private void DeactivateBoat()
-    {
-
-        isDocked = true;
-
-        DeactivateBoatControls();
-    }
-
-    private void DeactivateBoatControls()
-    {
-        controls.Boat.Disable();
-    }
-
-    private void SetupBoatControls()
-    {
-        controls = new PlayerControls();
-        controls.Boat.Enable();
-    }
-    
     public void Highlight(bool isSelected)
     {
         if (isSelected)
         {
-            spriteRenderer.material = selectedMaterial; 
+            spriteRenderer.material = selectedMaterial;
         }
         else
         {
@@ -83,41 +62,68 @@ public class PlayerBoat : MonoBehaviour, IInteractable
     private void MoveToBoat()
     {
         myRigidBody = interactingPlayer.GetComponent<Rigidbody2D>();
-        interactingPlayer.GetComponent<CapsuleCollider2D>().enabled = false;
+        interactingPlayer.DisableControl();
         interactingPlayer.transform.position = gameObject.transform.position;
         gameObject.transform.parent = interactingPlayer.transform;
-        interactingPlayer.enabled = false;
-        isDocked = false;
     }
 
     private void MoveToLand(Vector3 landingPosition)
     {
-        interactingPlayer.GetComponent<CapsuleCollider2D>().enabled = true;
+        interactingPlayer.EnableControl();
         gameObject.transform.parent = null;
-        interactingPlayer.enabled = true;
         interactingPlayer.transform.position = landingPosition;
-        isDocked = true;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void ActivateBoat()
     {
-        if (!isDocked)
+        MoveToBoat();
+        EnableBoatControls();
+    }
+    
+    private void DeactivateBoat()
+    {
+        DeactivateBoatControls();
+    }
+
+    private void DeactivateBoatControls()
+    {
+        controls.Boat.Disable();
+    }
+
+    private void EnableBoatControls()
+    {
+        controls.Boat.Enable();
+    }
+
+    private void Disembark_performed(InputAction.CallbackContext ctx)
+    {
+        DeactivateBoat();
+        MoveToLand(landPosition);
+        controls.Boat.Interact.performed -= Disembark_performed;
+    }
+            
+    private void Disembark(Collider2D collision)
+    {
+        DeactivateBoat();
+        MoveToLand(landPosition);
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Disembark Area"))
         {
-            //Move to land?
-            Vector3 landDirection = (collision.GetContact(0).point);
-            Debug.DrawLine(interactingPlayer.transform.position, landDirection, Color.red, 4.0f);
-            RaycastHit2D raycastHit2D = Physics2D.Raycast
-                (interactingPlayer.transform.position,
-                landDirection,
-                .5f,
-                LayerMask.GetMask("Ground"));
-            var contactPoint = raycastHit2D.point;
-            Debug.DrawLine(interactingPlayer.transform.position, contactPoint, Color.white, 4.0f);
-            var landPosition = contactPoint;
+            controls.Boat.Interact.performed -= Disembark_performed;
+            Debug.Log("exiting docking area");
+        }
+    }
 
-            DeactivateBoat();
-
-            MoveToLand(landPosition);
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Disembark Area"))
+        {
+            landPosition = collision.transform.position;
+            controls.Boat.Interact.performed += Disembark_performed;
+            Debug.Log("entering docking area");
         }
     }
 }

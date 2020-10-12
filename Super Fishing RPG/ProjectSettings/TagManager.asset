@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Ground
   - Vehicle
+  - Disembark Area
+  - Detector
   layers:
   - Default
   - TransparentFX
