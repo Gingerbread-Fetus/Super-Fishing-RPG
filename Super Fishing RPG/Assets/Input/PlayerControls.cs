@@ -33,6 +33,14 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Cast Rod"",
+                    ""type"": ""Button"",
+                    ""id"": ""3c9d42d4-ecc0-4a7f-b10d-90525c7dc06e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -187,6 +195,28 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f6ab3f63-8808-4f58-8e89-47c66fe31703"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Cast Rod"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bbc9d6e8-c760-447a-9e16-66472fd8ad07"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Cast Rod"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -711,6 +741,14 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
+                    ""name"": ""Cast Rod"",
+                    ""type"": ""Button"",
+                    ""id"": ""90309746-4388-41ff-aa01-b4322fc2aa05"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
                     ""name"": ""Interact"",
                     ""type"": ""Button"",
                     ""id"": ""42983c77-12c6-485d-ba79-1c21c34c7733"",
@@ -851,6 +889,28 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7992b5b5-86df-4705-96bd-dce4a8c089e0"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Cast Rod"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""44041a7f-b43a-435a-8260-9f5eb47647f7"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Cast Rod"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -922,6 +982,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
+        m_Player_CastRod = m_Player.FindAction("Cast Rod", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -937,6 +998,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         // Boat
         m_Boat = asset.FindActionMap("Boat", throwIfNotFound: true);
         m_Boat_Move = m_Boat.FindAction("Move", throwIfNotFound: true);
+        m_Boat_CastRod = m_Boat.FindAction("Cast Rod", throwIfNotFound: true);
         m_Boat_Interact = m_Boat.FindAction("Interact", throwIfNotFound: true);
     }
 
@@ -989,12 +1051,14 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private IPlayerActions m_PlayerActionsCallbackInterface;
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_Interact;
+    private readonly InputAction m_Player_CastRod;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
         public PlayerActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
+        public InputAction @CastRod => m_Wrapper.m_Player_CastRod;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1010,6 +1074,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Interact.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract;
                 @Interact.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract;
                 @Interact.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract;
+                @CastRod.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCastRod;
+                @CastRod.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCastRod;
+                @CastRod.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCastRod;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1020,6 +1087,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Interact.started += instance.OnInteract;
                 @Interact.performed += instance.OnInteract;
                 @Interact.canceled += instance.OnInteract;
+                @CastRod.started += instance.OnCastRod;
+                @CastRod.performed += instance.OnCastRod;
+                @CastRod.canceled += instance.OnCastRod;
             }
         }
     }
@@ -1134,12 +1204,14 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputActionMap m_Boat;
     private IBoatActions m_BoatActionsCallbackInterface;
     private readonly InputAction m_Boat_Move;
+    private readonly InputAction m_Boat_CastRod;
     private readonly InputAction m_Boat_Interact;
     public struct BoatActions
     {
         private @PlayerControls m_Wrapper;
         public BoatActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Boat_Move;
+        public InputAction @CastRod => m_Wrapper.m_Boat_CastRod;
         public InputAction @Interact => m_Wrapper.m_Boat_Interact;
         public InputActionMap Get() { return m_Wrapper.m_Boat; }
         public void Enable() { Get().Enable(); }
@@ -1153,6 +1225,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Move.started -= m_Wrapper.m_BoatActionsCallbackInterface.OnMove;
                 @Move.performed -= m_Wrapper.m_BoatActionsCallbackInterface.OnMove;
                 @Move.canceled -= m_Wrapper.m_BoatActionsCallbackInterface.OnMove;
+                @CastRod.started -= m_Wrapper.m_BoatActionsCallbackInterface.OnCastRod;
+                @CastRod.performed -= m_Wrapper.m_BoatActionsCallbackInterface.OnCastRod;
+                @CastRod.canceled -= m_Wrapper.m_BoatActionsCallbackInterface.OnCastRod;
                 @Interact.started -= m_Wrapper.m_BoatActionsCallbackInterface.OnInteract;
                 @Interact.performed -= m_Wrapper.m_BoatActionsCallbackInterface.OnInteract;
                 @Interact.canceled -= m_Wrapper.m_BoatActionsCallbackInterface.OnInteract;
@@ -1163,6 +1238,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Move.started += instance.OnMove;
                 @Move.performed += instance.OnMove;
                 @Move.canceled += instance.OnMove;
+                @CastRod.started += instance.OnCastRod;
+                @CastRod.performed += instance.OnCastRod;
+                @CastRod.canceled += instance.OnCastRod;
                 @Interact.started += instance.OnInteract;
                 @Interact.performed += instance.OnInteract;
                 @Interact.canceled += instance.OnInteract;
@@ -1219,6 +1297,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     {
         void OnMove(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
+        void OnCastRod(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
@@ -1236,6 +1315,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     public interface IBoatActions
     {
         void OnMove(InputAction.CallbackContext context);
+        void OnCastRod(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
     }
 }

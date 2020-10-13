@@ -17,6 +17,9 @@ public class PlayerController : MonoBehaviour
     float vertical;
 
     [SerializeField] float moveSpeed = 20.0f;
+    private bool isCast = false;
+    private float lastXDir;
+    private float lastYDir;
 
     public IInteractable NearbyInteractable
     {
@@ -30,6 +33,8 @@ public class PlayerController : MonoBehaviour
         controls = new PlayerControls();
         controls.Player.Enable();
         controls.Player.Interact.performed += Interact_performed;
+        //controls.Player.Interact.performed += ctx => Interact_performed(ctx);//Try this later.
+        controls.Player.CastRod.performed += Cast_performed;
     }
 
     private void OnDisable()
@@ -48,10 +53,20 @@ public class PlayerController : MonoBehaviour
     {
         myRigidBody = GetComponent<Rigidbody2D>();
     }
-    
+
+    private void Update()
+    {
+        var lastMoveVector = controls.Player.Move.ReadValue<Vector2>();
+        if (controls.Player.Move.triggered)
+        {
+            lastXDir = lastMoveVector.x;
+            lastYDir = lastMoveVector.y;
+        }
+    }
+
     private void FixedUpdate()
     {
-        if (isActiveAndEnabled)
+        if (isActiveAndEnabled && !isCast)
         {
             var moveVector = controls.Player.Move.ReadValue<Vector2>() * (moveSpeed * Time.deltaTime);
             myRigidBody.velocity = moveVector;
@@ -68,6 +83,20 @@ public class PlayerController : MonoBehaviour
         {
             NearbyInteractable.InteractingPlayer = this;
             NearbyInteractable.Interact();
+        }
+    }
+
+    private void Cast_performed(InputAction.CallbackContext ctx)
+    {
+        if (isCast)
+        {
+            isCast = !isCast;
+            myAnimator.SetBool("Cast", isCast); 
+        }
+        else
+        {
+            isCast = !isCast;
+            myAnimator.SetBool("Cast", isCast);
         }
     }
 
