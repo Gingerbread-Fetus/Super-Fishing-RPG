@@ -40,7 +40,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""id"": ""3c9d42d4-ecc0-4a7f-b10d-90525c7dc06e"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """"
+                    ""interactions"": ""Press(behavior=1)""
                 }
             ],
             ""bindings"": [
@@ -727,192 +727,6 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
-        },
-        {
-            ""name"": ""Boat"",
-            ""id"": ""1bac1cb7-e024-4932-ab06-debede33124b"",
-            ""actions"": [
-                {
-                    ""name"": ""Move"",
-                    ""type"": ""Value"",
-                    ""id"": ""4728ee37-bc5e-4d39-89b1-ac5b35b83b53"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""Cast Rod"",
-                    ""type"": ""Button"",
-                    ""id"": ""90309746-4388-41ff-aa01-b4322fc2aa05"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""Interact"",
-                    ""type"": ""Button"",
-                    ""id"": ""42983c77-12c6-485d-ba79-1c21c34c7733"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                }
-            ],
-            ""bindings"": [
-                {
-                    ""name"": ""WASD"",
-                    ""id"": ""3b2d63fd-0ae2-43ce-adcf-3c2adf385feb"",
-                    ""path"": ""Dpad"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""e87e28ac-1ee4-416f-8cb6-df883bb447b6"",
-                    ""path"": ""<Keyboard>/w"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""7093f79b-9b96-44e6-bd1d-bed48b898517"",
-                    ""path"": ""<Keyboard>/upArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""9f2abc2a-adc9-433d-804d-eba42fb58823"",
-                    ""path"": ""<Keyboard>/s"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""59cb56d2-b585-48df-a5e9-e6316d689e8c"",
-                    ""path"": ""<Keyboard>/downArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""4a79d8fb-0936-4400-bca0-dd6468e21840"",
-                    ""path"": ""<Keyboard>/a"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""f17d29d8-a9c2-45ec-9ff2-f43e211d33e4"",
-                    ""path"": ""<Keyboard>/leftArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""e6ca9c2e-3c0e-4dce-90ac-c2f903755b84"",
-                    ""path"": ""<Keyboard>/d"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""1c3de455-e05d-4f50-b8dd-fc1d63167894"",
-                    ""path"": ""<Keyboard>/rightArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""df33d340-b077-405c-8df3-e56bef548648"",
-                    ""path"": ""<Gamepad>/leftStick"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Gamepad"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""45f510fb-8dc1-481f-80b4-e756dcc362ce"",
-                    ""path"": ""<Keyboard>/f"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Interact"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""2538b79c-91f5-483e-b899-4d1961b75c98"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Interact"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""7992b5b5-86df-4705-96bd-dce4a8c089e0"",
-                    ""path"": ""<Keyboard>/space"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Cast Rod"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""44041a7f-b43a-435a-8260-9f5eb47647f7"",
-                    ""path"": ""<Gamepad>/rightShoulder"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Cast Rod"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                }
-            ]
         }
     ],
     ""controlSchemes"": [
@@ -995,11 +809,6 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_UI_RightClick = m_UI.FindAction("RightClick", throwIfNotFound: true);
         m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
-        // Boat
-        m_Boat = asset.FindActionMap("Boat", throwIfNotFound: true);
-        m_Boat_Move = m_Boat.FindAction("Move", throwIfNotFound: true);
-        m_Boat_CastRod = m_Boat.FindAction("Cast Rod", throwIfNotFound: true);
-        m_Boat_Interact = m_Boat.FindAction("Interact", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1199,55 +1008,6 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         }
     }
     public UIActions @UI => new UIActions(this);
-
-    // Boat
-    private readonly InputActionMap m_Boat;
-    private IBoatActions m_BoatActionsCallbackInterface;
-    private readonly InputAction m_Boat_Move;
-    private readonly InputAction m_Boat_CastRod;
-    private readonly InputAction m_Boat_Interact;
-    public struct BoatActions
-    {
-        private @PlayerControls m_Wrapper;
-        public BoatActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Move => m_Wrapper.m_Boat_Move;
-        public InputAction @CastRod => m_Wrapper.m_Boat_CastRod;
-        public InputAction @Interact => m_Wrapper.m_Boat_Interact;
-        public InputActionMap Get() { return m_Wrapper.m_Boat; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(BoatActions set) { return set.Get(); }
-        public void SetCallbacks(IBoatActions instance)
-        {
-            if (m_Wrapper.m_BoatActionsCallbackInterface != null)
-            {
-                @Move.started -= m_Wrapper.m_BoatActionsCallbackInterface.OnMove;
-                @Move.performed -= m_Wrapper.m_BoatActionsCallbackInterface.OnMove;
-                @Move.canceled -= m_Wrapper.m_BoatActionsCallbackInterface.OnMove;
-                @CastRod.started -= m_Wrapper.m_BoatActionsCallbackInterface.OnCastRod;
-                @CastRod.performed -= m_Wrapper.m_BoatActionsCallbackInterface.OnCastRod;
-                @CastRod.canceled -= m_Wrapper.m_BoatActionsCallbackInterface.OnCastRod;
-                @Interact.started -= m_Wrapper.m_BoatActionsCallbackInterface.OnInteract;
-                @Interact.performed -= m_Wrapper.m_BoatActionsCallbackInterface.OnInteract;
-                @Interact.canceled -= m_Wrapper.m_BoatActionsCallbackInterface.OnInteract;
-            }
-            m_Wrapper.m_BoatActionsCallbackInterface = instance;
-            if (instance != null)
-            {
-                @Move.started += instance.OnMove;
-                @Move.performed += instance.OnMove;
-                @Move.canceled += instance.OnMove;
-                @CastRod.started += instance.OnCastRod;
-                @CastRod.performed += instance.OnCastRod;
-                @CastRod.canceled += instance.OnCastRod;
-                @Interact.started += instance.OnInteract;
-                @Interact.performed += instance.OnInteract;
-                @Interact.canceled += instance.OnInteract;
-            }
-        }
-    }
-    public BoatActions @Boat => new BoatActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     public InputControlScheme KeyboardMouseScheme
     {
@@ -1311,11 +1071,5 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         void OnRightClick(InputAction.CallbackContext context);
         void OnTrackedDevicePosition(InputAction.CallbackContext context);
         void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
-    }
-    public interface IBoatActions
-    {
-        void OnMove(InputAction.CallbackContext context);
-        void OnCastRod(InputAction.CallbackContext context);
-        void OnInteract(InputAction.CallbackContext context);
     }
 }

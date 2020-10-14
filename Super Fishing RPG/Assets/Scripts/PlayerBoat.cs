@@ -31,7 +31,6 @@ public class PlayerBoat : MonoBehaviour, IInteractable, IVehicle
         }
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();

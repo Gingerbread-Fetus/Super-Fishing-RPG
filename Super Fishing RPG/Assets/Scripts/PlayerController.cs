@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Interactions;
 
 [RequireComponent(typeof(PlayerInput))]
 public class PlayerController : MonoBehaviour
@@ -32,11 +33,13 @@ public class PlayerController : MonoBehaviour
 
         controls = new PlayerControls();
         controls.Player.Enable();
-        controls.Player.Interact.performed += Interact_performed;
-        //controls.Player.Interact.performed += ctx => Interact_performed(ctx);//Try this later.
-        controls.Player.CastRod.performed += Cast_performed;
-    }
 
+        controls.Player.Interact.performed += ctx => Interact_performed(ctx);
+
+        controls.Player.CastRod.started += ctx => Cast_started(ctx);
+        controls.Player.CastRod.performed += ctx => Cast_performed(ctx);
+    }
+    
     private void OnDisable()
     {
         controls.Player.Disable();
@@ -78,7 +81,6 @@ public class PlayerController : MonoBehaviour
 
     private void Interact_performed(InputAction.CallbackContext ctx)
     {
-        Debug.Log("Nearby interactable: " + NearbyInteractable);
         if (NearbyInteractable != null)
         {
             NearbyInteractable.InteractingPlayer = this;
@@ -86,18 +88,26 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void Cast_performed(InputAction.CallbackContext ctx)
+    private void Cast_started(InputAction.CallbackContext ctx)
     {
+        Debug.Log("Start cast");
         if (isCast)
         {
+            myAnimator.SetBool("Cast", !isCast);
             isCast = !isCast;
-            myAnimator.SetBool("Cast", isCast); 
         }
         else
         {
             isCast = !isCast;
-            myAnimator.SetBool("Cast", isCast);
         }
+    }
+
+    private void Cast_performed(InputAction.CallbackContext ctx)
+    {
+        Debug.Log("Perform Cast");
+        //play animation
+        myAnimator.SetBool("Cast", isCast);
+
     }
 
     public void DisableControl()
