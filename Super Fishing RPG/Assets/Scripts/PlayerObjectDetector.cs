@@ -12,7 +12,6 @@ public class PlayerObjectDetector : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         nearbyInteractable = collision.GetComponent<IInteractable>();
-        Debug.Log("Object detector hit: " + collision);
         if (nearbyInteractable != null)
         {
             //Debug.Log("nearbyInteractable is: " + nearbyInteractable);
