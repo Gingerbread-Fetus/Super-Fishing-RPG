@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] float moveSpeed = 20.0f;
     private bool isCasting = false;
+    private bool isCast = false;
     private float lastXDir;
     private float lastYDir;
 
@@ -60,14 +61,19 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        aimReticule.MoveReticule(moveVector);
+        aimReticule.gameObject.SetActive(isCasting);
+        if (isCasting)
+        {
+            var reticuleVector = controls.Player.Move.ReadValue<Vector2>() * (moveSpeed * Time.deltaTime);
+            aimReticule.MoveReticule(reticuleVector); 
+        }
     }
 
     private void FixedUpdate()
     {
-        moveVector = controls.Player.Move.ReadValue<Vector2>() * (moveSpeed * Time.deltaTime);
-        if (!isCasting)
+        if (!isCasting && !isCast)
         {
+            moveVector = controls.Player.Move.ReadValue<Vector2>() * (moveSpeed * Time.deltaTime);
             myRigidBody.velocity = moveVector;
         }
 
@@ -86,27 +92,31 @@ public class PlayerController : MonoBehaviour
 
     private void Cast_started(InputAction.CallbackContext ctx)
     {
-        Debug.Log("Start cast");
-        if (isCasting)
+        if (!isCast)
         {
-            isCasting = !isCasting;
-            myAnimator.SetTrigger("Hook");
+            Debug.Log("Start cast");
+            myAnimator.SetTrigger("StartCast");
+            isCasting = true; 
         }
         else
         {
-            aimReticule.gameObject.SetActive(true);
-            isCasting = !isCasting;
-            myAnimator.SetBool("Cast", isCasting);
+            Debug.Log("Hook and reel in");
+            isCast = false;
+            myAnimator.SetTrigger("Hook");
+            myAnimator.SetBool("Cast", isCast);
         }
     }
 
     private void Cast_performed(InputAction.CallbackContext ctx)
     {
-        Debug.Log("Perform Cast");
-        isCasting = !isCasting;
-        myAnimator.SetBool("Cast", isCasting);
-        aimReticule.Reset();
-        aimReticule.gameObject.SetActive(false);
+        if (isCasting)
+        {
+            Debug.Log("Perform Cast");
+            isCasting = false;
+            isCast = true;
+            myAnimator.SetBool("Cast", isCast);
+            aimReticule.transform.position = transform.position;
+        }
     }
 
     public void DisableControl()

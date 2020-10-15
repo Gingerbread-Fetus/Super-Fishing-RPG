@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 //TODO: Consider making a vehicle interface for some of these methods.
 public class PlayerBoat : MonoBehaviour, IInteractable, IVehicle
 {
-    [SerializeField] Material selectedMaterial;
+    [SerializeField] Material selectedMaterial = default;
     [SerializeField] public float boatSpeed = 20.0f;
     public bool isBoarded;
 
