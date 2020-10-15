@@ -14,7 +14,6 @@ public class PlayerObjectDetector : MonoBehaviour
         nearbyInteractable = collision.GetComponent<IInteractable>();
         if (nearbyInteractable != null)
         {
-            //Debug.Log("nearbyInteractable is: " + nearbyInteractable);
             nearbyInteractable.IsHighlighted = true;
         }
     }
@@ -23,7 +22,6 @@ public class PlayerObjectDetector : MonoBehaviour
     {
         if (nearbyInteractable != null)
         {
-            //Debug.Log("nearbyInteractable is no longer: " + nearbyInteractable);
             nearbyInteractable.IsHighlighted = false;
             nearbyInteractable = null; 
         }

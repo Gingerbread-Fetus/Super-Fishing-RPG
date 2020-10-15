@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
     PlayerInput playerInput;
     PlayerControls controls;
     PlayerObjectDetector objectDetector;
+    PlayerAimReticule aimReticule;
+    Vector2 moveVector;
     Animator myAnimator;
     Rigidbody2D myRigidBody;
 
@@ -18,18 +20,17 @@ public class PlayerController : MonoBehaviour
     float vertical;
 
     [SerializeField] float moveSpeed = 20.0f;
-    private bool isCast = false;
+    private bool isCasting = false;
     private float lastXDir;
     private float lastYDir;
 
-    public IInteractable NearbyInteractable
-    {
-        get => objectDetector.NearbyInteractable;
-    }
+    public IInteractable NearbyInteractable { get => objectDetector.NearbyInteractable;}
 
     private void OnEnable()
     {
         objectDetector = GetComponentInChildren<PlayerObjectDetector>();
+        aimReticule = GetComponentInChildren<PlayerAimReticule>(true);
+        aimReticule.gameObject.SetActive(false);
 
         controls = new PlayerControls();
         controls.Player.Enable();
@@ -59,24 +60,19 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        var lastMoveVector = controls.Player.Move.ReadValue<Vector2>();
-        if (controls.Player.Move.triggered)
-        {
-            lastXDir = lastMoveVector.x;
-            lastYDir = lastMoveVector.y;
-        }
+        aimReticule.MoveReticule(moveVector);
     }
 
     private void FixedUpdate()
     {
-        if (isActiveAndEnabled && !isCast)
+        moveVector = controls.Player.Move.ReadValue<Vector2>() * (moveSpeed * Time.deltaTime);
+        if (!isCasting)
         {
-            var moveVector = controls.Player.Move.ReadValue<Vector2>() * (moveSpeed * Time.deltaTime);
             myRigidBody.velocity = moveVector;
-
-            myAnimator.SetFloat("XDir", moveVector.x);
-            myAnimator.SetFloat("YDir", moveVector.y); 
         }
+
+        myAnimator.SetFloat("XDir", moveVector.x);
+        myAnimator.SetFloat("YDir", moveVector.y);
     }
 
     private void Interact_performed(InputAction.CallbackContext ctx)
@@ -91,23 +87,26 @@ public class PlayerController : MonoBehaviour
     private void Cast_started(InputAction.CallbackContext ctx)
     {
         Debug.Log("Start cast");
-        if (isCast)
+        if (isCasting)
         {
-            myAnimator.SetBool("Cast", !isCast);
-            isCast = !isCast;
+            isCasting = !isCasting;
+            myAnimator.SetTrigger("Hook");
         }
         else
         {
-            isCast = !isCast;
+            aimReticule.gameObject.SetActive(true);
+            isCasting = !isCasting;
+            myAnimator.SetBool("Cast", isCasting);
         }
     }
 
     private void Cast_performed(InputAction.CallbackContext ctx)
     {
         Debug.Log("Perform Cast");
-        //play animation
-        myAnimator.SetBool("Cast", isCast);
-
+        isCasting = !isCasting;
+        myAnimator.SetBool("Cast", isCasting);
+        aimReticule.Reset();
+        aimReticule.gameObject.SetActive(false);
     }
 
     public void DisableControl()
