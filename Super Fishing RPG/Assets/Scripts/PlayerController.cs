@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     PlayerControls controls;
     PlayerObjectDetector objectDetector;
     PlayerAimReticule aimReticule;
+    Vector3 castHeading;
     Vector2 moveVector;
     Animator myAnimator;
     Rigidbody2D myRigidBody;
@@ -64,21 +65,28 @@ public class PlayerController : MonoBehaviour
         aimReticule.gameObject.SetActive(isCasting);
         if (isCasting)
         {
+            myRigidBody.velocity = new Vector2();
             var reticuleVector = controls.Player.Move.ReadValue<Vector2>() * (moveSpeed * Time.deltaTime);
-            aimReticule.MoveReticule(reticuleVector); 
+            aimReticule.MoveReticule(reticuleVector);
+            SetCastFacing();
         }
     }
 
     private void FixedUpdate()
     {
+        Move();
+    }
+
+    private void Move()
+    {
         if (!isCasting && !isCast)
         {
             moveVector = controls.Player.Move.ReadValue<Vector2>() * (moveSpeed * Time.deltaTime);
             myRigidBody.velocity = moveVector;
-        }
 
-        myAnimator.SetFloat("XDir", moveVector.x);
-        myAnimator.SetFloat("YDir", moveVector.y);
+            myAnimator.SetFloat("XDir", moveVector.x);
+            myAnimator.SetFloat("YDir", moveVector.y);
+        }
     }
 
     private void Interact_performed(InputAction.CallbackContext ctx)
@@ -115,8 +123,18 @@ public class PlayerController : MonoBehaviour
             isCasting = false;
             isCast = true;
             myAnimator.SetBool("Cast", isCast);
-            aimReticule.transform.position = transform.position;
+            myAnimator.SetFloat("CastHeadingX", castHeading.x);
+            myAnimator.SetFloat("CastHeadingY", castHeading.y);
+            Debug.Log("Cast Heading" + castHeading);
+            aimReticule.Reset();
         }
+    }
+
+    private void SetCastFacing()
+    {
+        castHeading = aimReticule.transform.position - transform.position;
+        myAnimator.SetFloat("CastHeadingX", castHeading.x);
+        myAnimator.SetFloat("CastHeadingY", castHeading.y);
     }
 
     public void DisableControl()
