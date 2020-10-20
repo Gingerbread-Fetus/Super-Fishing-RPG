@@ -210,7 +210,7 @@ BlendTree:
     m_Position: {x: 0, y: -1}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: XDir
+    m_DirectBlendParameter: YDir
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 90397b96137365d459f82f9d72943eba, type: 2}
@@ -218,7 +218,7 @@ BlendTree:
     m_Position: {x: 0, y: 1}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: XDir
+    m_DirectBlendParameter: YDir
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 7472e676753f8be4db7ad37fd02834a0, type: 2}

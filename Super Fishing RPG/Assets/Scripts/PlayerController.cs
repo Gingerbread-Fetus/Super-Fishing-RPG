@@ -8,6 +8,9 @@ using UnityEngine.InputSystem.Interactions;
 [RequireComponent(typeof(PlayerInput))]
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] float moveSpeed = 20.0f;
+    [SerializeField] GameObject rodObject;
+
     PlayerInput playerInput;
     PlayerControls controls;
     PlayerObjectDetector objectDetector;
@@ -20,7 +23,6 @@ public class PlayerController : MonoBehaviour
     float horizontal;
     float vertical;
 
-    [SerializeField] float moveSpeed = 20.0f;
     private bool isCasting = false;
     private bool isCast = false;
     private float lastXDir;
@@ -62,16 +64,9 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        aimReticule.gameObject.SetActive(isCasting);
-        if (isCasting)
-        {
-            myRigidBody.velocity = new Vector2();
-            var reticuleVector = controls.Player.Move.ReadValue<Vector2>() * (moveSpeed * Time.deltaTime);
-            aimReticule.MoveReticule(reticuleVector);
-            SetCastFacing();
-        }
+        CheckCasting();
     }
-
+        
     private void FixedUpdate()
     {
         Move();
@@ -86,6 +81,18 @@ public class PlayerController : MonoBehaviour
 
             myAnimator.SetFloat("XDir", moveVector.x);
             myAnimator.SetFloat("YDir", moveVector.y);
+        }
+    }
+
+    private void CheckCasting()
+    {
+        aimReticule.gameObject.SetActive(isCasting);
+        if (isCasting)
+        {
+            myRigidBody.velocity = new Vector2();
+            var reticuleVector = controls.Player.Move.ReadValue<Vector2>() * (moveSpeed * Time.deltaTime);
+            aimReticule.MoveReticule(reticuleVector);
+            SetCastFacing();
         }
     }
 
