@@ -8,20 +8,22 @@ public class PlayerAimReticule : MonoBehaviour
 {
     bool playerIsCasting;
     bool validCastLocation = false;
+    CircleCollider2D circleCollider = default;
     [SerializeField] float reticuleMoveSpeed = 1.0f;
     [SerializeField] TilemapCollider2D tileMap;
 
     public bool ValidCastLocation { get => validCastLocation;}
 
-    private void Update() 
+    void Update()
     {
+        Debug.Log("Collider is touching ground? : " + circleCollider.IsTouchingLayers(LayerMask.GetMask("Ground", "Ground Collision")));
     }
 
-    void OnTriggerStay2D(Collider2D other)
+    void OnEnable()
     {
-        Debug.Log("In collider: " + other.name);
+        if(circleCollider == null) { circleCollider = GetComponent<CircleCollider2D>(); }
     }
-
+    
     public void MoveReticule(Vector2 moveVector)
     {
         if (isActiveAndEnabled)
@@ -33,5 +35,10 @@ public class PlayerAimReticule : MonoBehaviour
     public void Reset()
     {
         transform.position = transform.parent.transform.position;
+    }
+
+    public bool IsValidCastingLocation()
+    {
+        return !circleCollider.IsTouchingLayers(LayerMask.GetMask("Ground", "Ground Collision"));
     }
 }
