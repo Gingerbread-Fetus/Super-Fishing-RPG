@@ -21,7 +21,7 @@ public class DockArea : MonoBehaviour, IInteractable
 
     private void Highlight(bool isSelected)
     {
-        //Not implemented meaningfully yet.
+        //TODO Not implemented meaningfully yet.
     }
 
     public void Interact()

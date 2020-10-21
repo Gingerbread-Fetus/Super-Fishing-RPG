@@ -56,8 +56,7 @@ public class PlayerController : MonoBehaviour
     {
         myAnimator = GetComponent<Animator>();
     }
-
-    // Start is called before the first frame update
+    
     void Start()
     {
         myRigidBody = GetComponent<Rigidbody2D>();
@@ -127,22 +126,22 @@ public class PlayerController : MonoBehaviour
     {
         if (isCasting)
         {
-            Debug.Log("Perform Cast");
             isCasting = false;
             isCast = true;
-            myAnimator.SetBool("Cast", isCast);
             myAnimator.SetFloat("CastHeadingX", castHeading.x);
             myAnimator.SetFloat("CastHeadingY", castHeading.y);
-            Debug.Log("Cast Heading" + castHeading);
             if(aimReticule.IsValidCastingLocation())
             {
                 Debug.Log("Valid Cast Location");
+                myAnimator.SetBool("Cast", isCast);
                 bobberObject.SetActive(true);
                 bobberObject.transform.position = aimReticule.transform.position;
             }
             else
             {
                 Debug.Log("Invalid Cast");
+                myAnimator.SetTrigger("CancelCast");
+                isCast = false;
             }
             aimReticule.Reset();
         }
