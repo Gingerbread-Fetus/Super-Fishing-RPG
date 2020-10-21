@@ -9,8 +9,8 @@ using UnityEngine.InputSystem.Interactions;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] float moveSpeed = 20.0f;
-    [SerializeField] GameObject rodObject;
-    [SerializeField] GameObject bobberObject;
+    [SerializeField] GameObject rodObject = default;
+    [SerializeField] GameObject bobberObject = default;
 
     PlayerInput playerInput;
     PlayerControls controls;
@@ -134,8 +134,16 @@ public class PlayerController : MonoBehaviour
             myAnimator.SetFloat("CastHeadingX", castHeading.x);
             myAnimator.SetFloat("CastHeadingY", castHeading.y);
             Debug.Log("Cast Heading" + castHeading);
-            bobberObject.SetActive(true);
-            bobberObject.transform.position = aimReticule.transform.position;
+            if(aimReticule.ValidCastLocation)
+            {
+                Debug.Log("Valid Cast Location");
+                bobberObject.SetActive(true);
+                bobberObject.transform.position = aimReticule.transform.position;
+            }
+            else
+            {
+                Debug.Log("Invalid Cast");
+            }
             aimReticule.Reset();
         }
     }
