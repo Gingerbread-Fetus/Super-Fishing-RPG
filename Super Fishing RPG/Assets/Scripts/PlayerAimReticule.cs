@@ -16,7 +16,6 @@ public class PlayerAimReticule : MonoBehaviour
 
     void Update()
     {
-        Debug.Log("Collider is touching ground? : " + circleCollider.IsTouchingLayers(LayerMask.GetMask("Ground", "Ground Collision")));
     }
 
     void OnEnable()

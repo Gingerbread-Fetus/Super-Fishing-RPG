@@ -9,6 +9,8 @@ TagManager:
   - Disembark Area
   - Detector
   - Interactable
+  - Fish
+  - Bobber
   layers:
   - Default
   - TransparentFX
@@ -22,7 +24,7 @@ TagManager:
   - Object Detector
   - Interactable
   - Ground Collision
-  - 
+  - Fish
   - 
   - 
   - 

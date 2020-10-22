@@ -132,14 +132,12 @@ public class PlayerController : MonoBehaviour
             myAnimator.SetFloat("CastHeadingY", castHeading.y);
             if(aimReticule.IsValidCastingLocation())
             {
-                Debug.Log("Valid Cast Location");
                 myAnimator.SetBool("Cast", isCast);
                 bobberObject.SetActive(true);
                 bobberObject.transform.position = aimReticule.transform.position;
             }
             else
             {
-                Debug.Log("Invalid Cast");
                 myAnimator.SetTrigger("CancelCast");
                 isCast = false;
             }
