@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
 
@@ -13,7 +10,9 @@ public class FishController : MonoBehaviour
     [SerializeField] float moveSpeed = 1.0f;
     [SerializeField] int verticalBound = 3;
     [SerializeField] int horizontalBound = 3;
+    public float fishTimeout = 2;
 
+    GameObject playerBobber = null;
     Rigidbody2D myRigidBody;
     Tilemap waterTileMap;
     Vector3 startPosition;
@@ -31,11 +30,23 @@ public class FishController : MonoBehaviour
     private void FixedUpdate()
     {
         //Movement here.
-        if((Vector3.Distance(transform.position, goalPosition) <= acceptableDistance) && !isOnBobber)
+        if((Vector3.Distance(transform.position, goalPosition) <= acceptableDistance) && playerBobber == null)
         {
             goalPosition = GetNextGoalPosition();
             Debug.DrawLine(transform.position, goalPosition, Color.red);
         }
+        else
+        {
+            if ((Vector3.Distance(transform.position, goalPosition) <= acceptableDistance) && !isOnBobber)
+            {
+                isOnBobber = true;
+                playerBobber.GetComponentInParent<PlayerController>().HookedFish = this;
+                Animator playerAnimator = playerBobber.GetComponentInParent<Animator>();
+                //Fish has hit the hook, trigger animator.
+                playerAnimator.SetTrigger("HitBobber"); 
+            }
+        }
+
         float step = moveSpeed * Time.deltaTime;
         myRigidBody.position = Vector3.MoveTowards(myRigidBody.position, goalPosition, step);
 
@@ -53,16 +64,36 @@ public class FishController : MonoBehaviour
 
     public void BobberDetected(Collider2D collider)
     {
-        goalPosition = collider.transform.position;
-        isOnBobber = true;
+        playerBobber = collider.gameObject;
+        goalPosition = playerBobber.transform.position;
     }
 
+    public void Escape()
+    {
+        Animator playerAnimator = playerBobber.GetComponentInParent<Animator>();
+        playerAnimator.SetTrigger("FishTimeout");
+        isOnBobber = false;
+        playerBobber = null;
+        Debug.Log("Fish got away!");
+    }
+    
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        //Change direction if fish collides with ground.
         if (collision.gameObject.CompareTag("Ground"))
         {
-            Debug.Log("Fish collided with ground");
             goalPosition = GetNextGoalPosition();
         }
+    }
+
+    internal void StartTimeout()
+    {
+        StartCoroutine(EscapeTimeout());
+    }
+
+    private IEnumerator EscapeTimeout()
+    {
+        yield return new WaitForSeconds(fishTimeout);
+        Escape();
     }
 }

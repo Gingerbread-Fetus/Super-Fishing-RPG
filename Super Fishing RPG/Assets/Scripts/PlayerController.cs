@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     PlayerControls controls;
     PlayerObjectDetector objectDetector;
     PlayerAimReticule aimReticule;
+    FishController hookedFish;
     Vector3 castHeading;
     Vector2 moveVector;
     Animator myAnimator;
@@ -30,6 +31,7 @@ public class PlayerController : MonoBehaviour
     private float lastYDir;
 
     public IInteractable NearbyInteractable { get => objectDetector.NearbyInteractable;}
+    public FishController HookedFish { get => hookedFish; set => hookedFish = value; }
 
     private void OnEnable()
     {
@@ -107,21 +109,26 @@ public class PlayerController : MonoBehaviour
 
     private void Cast_started(InputAction.CallbackContext ctx)
     {
-        if (!isCast) //Start cast
+        //Start cast
+        if (!isCast)
         {
             myAnimator.SetTrigger("StartCast");
             isCasting = true; 
         }
-        else //Hook and reel in.
+        //Hook and reel in.
+        else
         {
+            //Reset the animator states.
             isCast = false;
             myAnimator.SetTrigger("Hook");
+            myAnimator.SetTrigger("FishTimeout");
             myAnimator.SetBool("Cast", isCast);
+            CatchFish();
             bobberObject.transform.position = transform.position;
             bobberObject.SetActive(false);
         }
     }
-
+    
     private void Cast_performed(InputAction.CallbackContext ctx)
     {
         if (isCasting)
@@ -152,6 +159,17 @@ public class PlayerController : MonoBehaviour
         myAnimator.SetFloat("CastHeadingY", castHeading.y);
     }
 
+    private void CatchFish()
+    {
+        if(hookedFish != null)
+        {
+            //Handle putting fish in inventory here?
+            Debug.Log("fish caught!");
+            Destroy(hookedFish.gameObject);
+            hookedFish = null;
+        }
+    }
+
     public void DisableControl()
     {
         GetComponent<CapsuleCollider2D>().enabled = false;
@@ -160,5 +178,15 @@ public class PlayerController : MonoBehaviour
     public void EnableControl()
     {
         GetComponent<CapsuleCollider2D>().enabled = true;
+    }
+
+    public void StartFishTimeout()
+    {
+        Debug.Log("Starting fish timeout");
+        Debug.Log("Hooked fish: " + hookedFish.name);
+        if (hookedFish != null)
+        {
+            hookedFish.StartTimeout(); 
+        }
     }
 }

@@ -3420,10 +3420,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52babfc161afa074fb4ee68362dee2a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  acceptableDistance: 0.10000000149011612
+  acceptableDistance: 0.1
   moveSpeed: 0.2
-  verticalBound: 3
-  horizontalBound: 3
+  verticalBound: 0
+  horizontalBound: 5
+  fishTimeout: 2
 --- !u!70 &660305647
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

@@ -19,5 +19,4 @@ public class FishVisionCone : MonoBehaviour
             fishController.BobberDetected(collision);
         }
     }
-
 }
