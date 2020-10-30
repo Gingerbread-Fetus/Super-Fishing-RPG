@@ -6,6 +6,9 @@ using Random = UnityEngine.Random;
 
 public class FishController : MonoBehaviour
 {
+    public Bounds HatcheryBounds { get => hatcheryBounds; set => hatcheryBounds = value; }
+    public Hatchery LocalHatchery { get => localHatchery; set => localHatchery = value; }
+
     [SerializeField] double acceptableDistance = .1f;
     [SerializeField] float moveSpeed = 1.0f;
     [SerializeField] int verticalBound = 3;
@@ -17,7 +20,10 @@ public class FishController : MonoBehaviour
     Tilemap waterTileMap;
     Vector3 startPosition;
     Vector3 goalPosition;
+    Hatchery localHatchery;
+    Bounds hatcheryBounds;
     private bool isOnBobber = false;
+
 
     private void Start()
     {
@@ -55,11 +61,18 @@ public class FishController : MonoBehaviour
 
     private Vector3 GetNextGoalPosition()
     {
-        Vector3Int startAsInt = waterTileMap.WorldToCell(startPosition);
-        int randX = Random.Range(startAsInt.x - horizontalBound, startAsInt.x + horizontalBound);
-        int randY = Random.Range(startAsInt.y - verticalBound, startAsInt.y + verticalBound);
-        Vector3Int GoalAsInt = new Vector3Int(randX, randY, 0);
-        return waterTileMap.CellToLocal(GoalAsInt);
+        float randX = Random.Range
+            (
+            localHatchery.transform.position.x - localHatchery.bounds.size.x/2,
+            localHatchery.transform.position.x + localHatchery.bounds.size.x/2
+            );
+        float randY = Random.Range
+            (
+            localHatchery.transform.position.y - localHatchery.bounds.size.y/2,
+            localHatchery.transform.position.y + localHatchery.bounds.size.y/2
+            );
+
+        return new Vector3(randX, randY, 0);
     }
 
     public void BobberDetected(Collider2D collider)
@@ -82,6 +95,7 @@ public class FishController : MonoBehaviour
         //Change direction if fish collides with ground.
         if (collision.gameObject.CompareTag("Ground"))
         {
+            Debug.Log("Fish hit ground");
             goalPosition = GetNextGoalPosition();
         }
     }
