@@ -6,18 +6,14 @@ using Random = UnityEngine.Random;
 
 public class FishController : MonoBehaviour
 {
-    public Bounds HatcheryBounds { get => hatcheryBounds; set => hatcheryBounds = value; }
     public Hatchery LocalHatchery { get => localHatchery; set => localHatchery = value; }
 
     [SerializeField] double acceptableDistance = .1f;
     [SerializeField] float moveSpeed = 1.0f;
-    [SerializeField] int verticalBound = 3;
-    [SerializeField] int horizontalBound = 3;
     public float fishTimeout = 2;
 
     GameObject playerBobber = null;
     Rigidbody2D myRigidBody;
-    Tilemap waterTileMap;
     Vector3 startPosition;
     Vector3 goalPosition;
     Hatchery localHatchery;
@@ -29,8 +25,13 @@ public class FishController : MonoBehaviour
     {
         startPosition = transform.position;
         myRigidBody = GetComponent<Rigidbody2D>();
-        waterTileMap = GetComponentInParent<Tilemap>();
         goalPosition = GetNextGoalPosition();
+        Debug.Log("Starting Goal Position: " + goalPosition);
+    }
+
+    private void Update()
+    {
+        //GetNextGoalPosition();
     }
 
     private void FixedUpdate()
@@ -39,6 +40,7 @@ public class FishController : MonoBehaviour
         if((Vector3.Distance(transform.position, goalPosition) <= acceptableDistance) && playerBobber == null)
         {
             goalPosition = GetNextGoalPosition();
+            Debug.Log("Goal Position: " + goalPosition);
             Debug.DrawLine(transform.position, goalPosition, Color.red);
         }
         else
@@ -49,30 +51,28 @@ public class FishController : MonoBehaviour
                 playerBobber.GetComponentInParent<PlayerController>().HookedFish = this;
                 Animator playerAnimator = playerBobber.GetComponentInParent<Animator>();
                 //Fish has hit the hook, trigger animator.
-                playerAnimator.SetTrigger("HitBobber"); 
+                playerAnimator.SetBool("HitBobber", true); 
             }
         }
-
         float step = moveSpeed * Time.deltaTime;
-        myRigidBody.position = Vector3.MoveTowards(myRigidBody.position, goalPosition, step);
-
-        //Debug.Log("Goal Position: " + goalPosition);
+        transform.position = Vector3.MoveTowards(transform.position, goalPosition, step);
     }
 
     private Vector3 GetNextGoalPosition()
     {
         float randX = Random.Range
             (
-            localHatchery.transform.position.x - localHatchery.bounds.size.x/2,
-            localHatchery.transform.position.x + localHatchery.bounds.size.x/2
+                localHatchery.bounds.min.x,
+                localHatchery.bounds.max.x
             );
         float randY = Random.Range
             (
-            localHatchery.transform.position.y - localHatchery.bounds.size.y/2,
-            localHatchery.transform.position.y + localHatchery.bounds.size.y/2
+                localHatchery.bounds.min.y,
+                localHatchery.bounds.max.y
             );
-
-        return new Vector3(randX, randY, 0);
+        Vector3 nextGoalPosition = new Vector3(randX, randY, 0);
+        Debug.DrawLine(nextGoalPosition, nextGoalPosition + Vector3.right/6.0f, Color.white, 3.0f);
+        return nextGoalPosition;
     }
 
     public void BobberDetected(Collider2D collider)
@@ -84,12 +84,16 @@ public class FishController : MonoBehaviour
     public void Escape()
     {
         Animator playerAnimator = playerBobber.GetComponentInParent<Animator>();
-        playerAnimator.SetTrigger("FishTimeout");
+        PlayerController playerController = playerBobber.GetComponentInParent<PlayerController>();
+        playerAnimator.SetBool("HitBobber", false);
+        playerController.FishOnLine = false;
+        playerController.HookedFish = null;
         isOnBobber = false;
         playerBobber = null;
+        StartCoroutine(CollisionCooldown());
         Debug.Log("Fish got away!");
     }
-    
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         //Change direction if fish collides with ground.
@@ -109,5 +113,12 @@ public class FishController : MonoBehaviour
     {
         yield return new WaitForSeconds(fishTimeout);
         Escape();
+    }
+    private IEnumerator CollisionCooldown()
+    {
+        GameObject visionCone = GetComponentInChildren<FishVisionCone>().gameObject;
+        visionCone.SetActive(false);
+        yield return new WaitForSeconds(5.0f);
+        visionCone.gameObject.SetActive(true);
     }
 }

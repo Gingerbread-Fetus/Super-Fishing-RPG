@@ -15,8 +15,13 @@ public class FishVisionCone : MonoBehaviour
     {
         if (collision.CompareTag("Bobber"))
         {
-            Debug.Log(collision.gameObject.name + " in collider");
-            fishController.BobberDetected(collision);
+            var playerObj = collision.gameObject.GetComponentInParent<PlayerController>();
+            //If there is already a fish on the line, ignore it.
+            if (!playerObj.FishOnLine)
+            {
+                playerObj.FishOnLine = true;
+                fishController.BobberDetected(collision); 
+            }
         }
     }
 }

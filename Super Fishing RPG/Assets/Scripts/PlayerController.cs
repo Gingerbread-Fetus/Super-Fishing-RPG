@@ -9,8 +9,9 @@ using UnityEngine.InputSystem.Interactions;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] float moveSpeed = 20.0f;
-    [SerializeField] GameObject rodObject = default;
+    //[SerializeField] GameObject rodObject = default;
     [SerializeField] GameObject bobberObject = default;
+    bool fishOnLine = false;
 
     PlayerInput playerInput;
     PlayerControls controls;
@@ -22,9 +23,6 @@ public class PlayerController : MonoBehaviour
     Animator myAnimator;
     Rigidbody2D myRigidBody;
 
-    float horizontal;
-    float vertical;
-
     private bool isCasting = false;
     private bool isCast = false;
     private float lastXDir;
@@ -32,6 +30,7 @@ public class PlayerController : MonoBehaviour
 
     public IInteractable NearbyInteractable { get => objectDetector.NearbyInteractable;}
     public FishController HookedFish { get => hookedFish; set => hookedFish = value; }
+    public bool FishOnLine { get => fishOnLine; set => fishOnLine = value; }
 
     private void OnEnable()
     {
@@ -121,7 +120,7 @@ public class PlayerController : MonoBehaviour
             //Reset the animator states.
             isCast = false;
             myAnimator.SetTrigger("Hook");
-            myAnimator.SetTrigger("FishTimeout");
+            myAnimator.SetBool("HitBobber", false);
             myAnimator.SetBool("Cast", isCast);
             CatchFish();
             bobberObject.transform.position = transform.position;
@@ -165,6 +164,8 @@ public class PlayerController : MonoBehaviour
         {
             //Handle putting fish in inventory here?
             Debug.Log("fish caught!");
+            hookedFish.LocalHatchery.FishPopulation.Remove(hookedFish);
+            fishOnLine = false;
             Destroy(hookedFish.gameObject);
             hookedFish = null;
         }

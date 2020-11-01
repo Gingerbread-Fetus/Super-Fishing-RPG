@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 
-[CustomEditor(typeof(Hatchery)), CanEditMultipleObjects]
+[CustomEditor(typeof(Hatchery))]
 public class HatcheryBounds : Editor
 {
     private BoxBoundsHandle m_BoundsHandle = new BoxBoundsHandle();
@@ -17,17 +17,18 @@ public class HatcheryBounds : Editor
         // draw the handle
         EditorGUI.BeginChangeCheck();
         m_BoundsHandle.DrawHandle();
+
         if (EditorGUI.EndChangeCheck())
         {
             // record the target object before setting new values so changes can be undone/redone
-            Undo.RecordObject(hatchery, "Change Bounds");
+            Undo.RecordObject(target, "Change Hatchery Bounds");
 
             // copy the handle's updated data back to the target object
             Bounds newBounds = new Bounds();
             newBounds.center = m_BoundsHandle.center;
             newBounds.size = m_BoundsHandle.size;
+            hatchery.bounds = newBounds;
             hatchery.Extents = newBounds.size;
-            hatchery.transform.position = newBounds.center;
         }
     }
 }
