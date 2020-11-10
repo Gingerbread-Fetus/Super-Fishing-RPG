@@ -26,7 +26,7 @@ public class FishController : MonoBehaviour
         startPosition = transform.position;
         myRigidBody = GetComponent<Rigidbody2D>();
         goalPosition = GetNextGoalPosition();
-        Debug.Log("Starting Goal Position: " + goalPosition);
+        //Debug.Log("Starting Goal Position: " + goalPosition);
     }
 
     private void Update()
@@ -40,7 +40,7 @@ public class FishController : MonoBehaviour
         if((Vector3.Distance(transform.position, goalPosition) <= acceptableDistance) && playerBobber == null)
         {
             goalPosition = GetNextGoalPosition();
-            Debug.Log("Goal Position: " + goalPosition);
+            //Debug.Log("Goal Position: " + goalPosition);
             Debug.DrawLine(transform.position, goalPosition, Color.red);
         }
         else

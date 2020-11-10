@@ -162,9 +162,9 @@ public class PlayerController : MonoBehaviour
     {
         if(hookedFish != null)
         {
-            //Handle putting fish in inventory here?
+            //TODO Handle putting fish in inventory here?
             Debug.Log("fish caught!");
-            hookedFish.LocalHatchery.FishPopulation.Remove(hookedFish);
+            hookedFish.LocalHatchery.RemoveFish(hookedFish);
             fishOnLine = false;
             Destroy(hookedFish.gameObject);
             hookedFish = null;

@@ -19876,8 +19876,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   extents: {x: 4, y: 2}
-  maxFish: 1
-  useConstantSpawnRate: 0
+  maxFish: 8
+  useConstantSpawnRate: 1
   spawnRate: 2
   fishStock:
   - {fileID: 543959317062136295, guid: a1c17efbe3e3644499e836689eeb3097, type: 3}

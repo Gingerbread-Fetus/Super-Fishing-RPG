@@ -15,7 +15,7 @@ public class Hatchery : MonoBehaviour
     [SerializeField]
     int maxFish = 5;
     [SerializeField]
-    bool useConstantSpawnRate; //TODO not implemented
+    bool useConstantSpawnRate = false;
     [SerializeField]
     float spawnRate = 2.0f;
     [SerializeField] //TODO replace later with Scriptable Objects.
@@ -39,6 +39,25 @@ public class Hatchery : MonoBehaviour
         {
             SpawnNewFish();
         }
+        numberOfFish = fishPopulation.Count;
+    }
+    
+    // Update is called once per frame
+    void Update()
+    {
+        if(numberOfFish < maxFish)
+        {
+            numberOfFish++;
+            float nextSpawnTime = Random.Range(0.1f, spawnRate);
+            if (!useConstantSpawnRate)
+            {
+                Invoke("SpawnNewFish", nextSpawnTime); 
+            }
+            else
+            {
+                Invoke("SpawnNewFish", spawnRate);
+            }
+        }
     }
 
     private void SpawnNewFish()
@@ -53,12 +72,9 @@ public class Hatchery : MonoBehaviour
         newFish.transform.parent = transform;
     }
 
-    // Update is called once per frame
-    void Update()
-    {    
-        if(fishPopulation.Count < maxFish)
-        {
-            SpawnNewFish();
-        }
+    public void RemoveFish(FishController fish)
+    {
+        fishPopulation.Remove(fish);
+        numberOfFish--;
     }
 }
