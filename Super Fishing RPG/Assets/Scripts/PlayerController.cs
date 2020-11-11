@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float moveSpeed = 20.0f;
     //[SerializeField] GameObject rodObject = default;
     [SerializeField] GameObject bobberObject = default;
+    [SerializeField] GameObject battleOverlay = default;
     bool fishOnLine = false;
 
     PlayerInput playerInput;
@@ -61,6 +62,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         myRigidBody = GetComponent<Rigidbody2D>();
+        if (battleOverlay.activeInHierarchy) { battleOverlay.SetActive(false); }
     }
 
     private void Update()
@@ -168,7 +170,16 @@ public class PlayerController : MonoBehaviour
             fishOnLine = false;
             Destroy(hookedFish.gameObject);
             hookedFish = null;
+            StartBattle();
         }
+    }
+
+    private void StartBattle()
+    {
+        Debug.Log("Starting Battle");
+        battleOverlay.SetActive(true);
+        //TODO Animations for polish
+        //TODO Make sure control is disabled
     }
 
     public void DisableControl()
