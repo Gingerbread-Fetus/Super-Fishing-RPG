@@ -3924,7 +3924,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 2100000, guid: a9248a1c835a84745b1f01607c27c9a3, type: 2}
+  m_Material: {fileID: 2100000, guid: 88364b10b7acc734cb247e8d3da06198, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -7095,7 +7095,7 @@ GameObject:
   - component: {fileID: 939464154}
   - component: {fileID: 939464153}
   m_Layer: 5
-  m_Name: Fish Image
+  m_Name: Enemy Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7117,8 +7117,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000015259, y: 150}
-  m_SizeDelta: {x: 300, y: 300}
+  m_AnchoredPosition: {x: -6.9, y: 168.3}
+  m_SizeDelta: {x: 300, y: 350}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &939464153
 MonoBehaviour:
@@ -7140,7 +7140,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 5602574970464266573, guid: 1e5f0f42716fd1f4ebe93ceb35e4df6b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
