@@ -1,5 +1,5 @@
 ﻿///Credit to: https://unitycoder.com/blog/2020/03/18/shader-color-cycling/
-Shader "UnityLibrary/2D/Effects/ColorCycle"
+Shader "Custom/ColorCycle"
 {
 	Properties
 	{
